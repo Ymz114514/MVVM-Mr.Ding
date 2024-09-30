@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!--
+软工2203
+2200770165
+杨明璋
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态改变文档内容</title>
+</head>
+<body>
+    <h1 id="title">Hello world!</h1>
+    <span id="dateTime"></span>
+    <br>
+    <button id="btn">点我改变标题</button>
+    <script>
+        //获取DOM元素
+        const title = document.getElementById('title')
+        const dateTime = document.getElementById('dateTime')
+        const btn = document.getElementById('btn')
+
+        //为按钮绑定点击事件
+        btn.addEventListener('click',function (){
+            title.innerText='欢迎来到我的网站'
+            dateTime.innerText=new Date()
+        })
+    </script>
+</body>
+</html>

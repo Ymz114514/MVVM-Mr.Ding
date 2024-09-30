@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--
+软工2203
+2200770165
+杨明璋
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>表格操作</title>
+    <style>
+        .container{
+            //以下样式是为了让主题内容居中对齐。
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        table {
+            width: 50%;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #dfeefd;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .input {
+            box-sizing: border-box;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #000;
+            border-radius: 20px;
+            width: 50%;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <table id="table">
+        <tr>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>操作</th>
+        </tr>
+    </table>
+    <div class="input">
+        <h3>请输入数据</h3>
+        <!-- 输入区域 -->
+        <label>姓名：<input type="text" id="name"/></label>
+        <br/>
+        <br/>
+        <label>年龄：<input type="text" id="age"/></label>
+        <br/>
+        <br/>
+        <button id="submit">添加记录</button>
+    </div>
+</div>
+<script>
+    const data = [];
+    const table = document.getElementById("table");
+    const name = document.getElementById("name");
+    const age = document.getElementById("age");
+    const submit = document.getElementById("submit");
+
+    class Person {
+        constructor(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+    }
+    function insertIndex(age){
+        //用于查找待插入位置的二分算法，考虑了元素可能重复的情况。
+        let i=0,j=data.length-1;
+        let mid;
+        while(i<=j){
+            mid=Math.floor((i+j)/2)
+            if(data[mid].age < age) i=mid+1
+            else if(data[mid.age] > age) j=mid-1
+            else j = mid-1
+        }
+        return i
+    }
+
+
+    submit.addEventListener("click", () => {
+        /**
+         * 1.用二分算法，获取新数据的插入位置。
+         * 2.将数据分别插入data和table中。
+         */
+        const newPerson = new Person(name.value, parseInt(age.value));
+        console.log(newPerson)
+        const index = insertIndex(newPerson.age)//获取插入位置
+        console.log(index)
+
+        data.splice(index,0,newPerson)//将数据插入数组中
+        console.log(data)
+        //将数据插入页面中
+        const newRow = table.insertRow(index+1)
+        newRow.insertCell(0).textContent=newPerson.name
+        newRow.insertCell(1).textContent=newPerson.age
+        newRow.insertCell(2).innerHTML='<button>删除</button>'
+
+        //清空输入框
+        age.value = name.value = "";
+    });
+
+    // 删除记录 这里使用了事件代理的特性给每一个表格中的按钮添加点击事件。
+    table.addEventListener("click", (e) => {
+        if (e.target.tagName === "BUTTON") {
+            /**
+             * 1.删除页面的元素。
+             * 2.删除data数组里对应的元素。
+             *
+             * JS有专门处理表格的方法。
+             */
+            const row=e.target.parentNode.parentNode//获取按钮元素所在的行元素的dom
+            const index = row.rowIndex//获取这一行的索引
+            //同步删除JS中维护的数组里的相应数据以及表格里的元素
+            data.splice(index-1,1)//因为表格中表头也占了一位索引，因此映射到JS维护的数组上的索引时要减一
+            table.deleteRow(row.rowIndex)
+        }
+    });
+</script>
+</body>
+</html>

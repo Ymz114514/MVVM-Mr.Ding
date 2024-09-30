@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!--
+软工2203
+2200770165
+杨明璋
+-->
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>动态更新和删除列表项</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        li {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li:last-child {
+            border-bottom: none;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 500px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .input-content {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>动态列表管理</h1>
+
+    <div class = "input-content">
+        <input type="text" id="itemInput" placeholder="新项">
+        <button id="addItem">添加项</button>
+    </div>
+    <ul id="myList">
+    </ul>
+    <script>
+        const myList = document.getElementById('myList')
+        const addItem = document.getElementById('addItem')
+        const input = document.getElementById('itemInput')
+        myList.addEventListener('click',function (e){
+            /**
+             *  使用事件委托的机制，来间接地给删除、编辑按钮绑定点击事件。
+             */
+            const button=e.target
+            if(button.innerText === '编辑'){
+                const name = prompt('请输入新的姓名：')
+                button.previousElementSibling.innerText = name //获取兄弟节点：span标签，并将其内容改为刚刚输入的name
+            }else if(button.innerText === '删除'){
+                //通过获取按钮标签的父元素，就是指定的li，然后将其移除
+                button.parentNode.remove()
+            }
+        })
+        addItem.addEventListener('click',function (){
+            /**
+             * 创建一个li元素，对其进行初始化后追加在myList后面。
+             */
+            const newLi=document.createElement('li')
+            newLi.innerHTML= `<span>${input.value}</span>
+            <button>编辑</button>
+            <button>删除</button>`
+            myList.append(newLi)
+            input.value=''
+        })
+
+
+
+
+    </script>
+</body>
+</html>
